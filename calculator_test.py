@@ -11,10 +11,12 @@ class CalculatorTest(unittest.TestCase):
         """Setup method"""
         print("Setup is running ...")
         desired_caps = {"app": "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"}
-        self.calcsession = webdriver.Remote(
-            command_executor = "http://127.0.0.1:4723",
-            desired_capabilities=desired_caps
-        )
+        try:
+            self.calcsession = webdriver.Remote(
+                command_executor="http://127.0.0.1:4723",
+                desired_capabilities=desired_caps)
+        except ConnectionRefusedError as e:
+            print(f"EXCEPTION:  {e}")
 
     def tearDown(self):
         """Finisher method"""
@@ -24,6 +26,13 @@ class CalculatorTest(unittest.TestCase):
     def test_add(self):
         """Add test"""
         print("Adding Test")
+        self.calcsession.find_element_by_name("One").click()
+        self.calcsession.find_element_by_name("Two").click()
+        self.calcsession.find_element_by_name("Plus").click()
+        self.calcsession.find_element_by_name("Nine").click()
+        self.calcsession.find_element_by_name("Equals").click()
+
+        self.assertEqual(self.getDisplayResults(), "21")
 
     def test_subtraction(self):
         """Subtraction test"""
@@ -36,4 +45,36 @@ class CalculatorTest(unittest.TestCase):
     def test_multiplication(self):
         """Multiplication test"""
         print("Multiplication Test")
+
+    def getDisplayResults(self):
+        text = self.calcsession.find_element_by_accessibility_id("CalculatorResults").text
+        text = text.strip("Display is ").rstrip(" ").lstrip(" ")
+        return text
+
+    def choose_calculator(self, locator):
+        print(f"Selected calc: {locator}")
+
+        # open the hamburger combo
+        self.calcsession.find_element_by_accessibility_id("TogglePaneButton").click()
+        # read all items in combo into the list
+        lst_of_elements_in_menu = self.calcsession.find_elements_by_class_name(
+            "Microsoft.UI.Xaml.Controls.NavigationViewItem")
+
+        print(f"Calculator combo elements: {len(lst_of_elements_in_menu)} -> "
+              f"{', '.join([item.get_attribute('AutomationId') for item in lst_of_elements_in_menu])}")
+
+        # find item by locator inputed and click on it
+        for item in lst_of_elements_in_menu:
+            if item.get_attribute("AutomationId") == locator:
+                item.click()
+                # if locator was found, stop looking further
+                break
+
+        # TODO: How to add break?
+        # [item.click() for item in lst_of_elements_in_menu if item.get_attribute("AutomationId") == locator]
+
+    def test_choose_another_calc(self):
+        print(f"Selecting another calc ...")
+        self.choose_calculator("Scientific")
+
 
