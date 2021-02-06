@@ -3,7 +3,7 @@
 # local library imports
 from setup import Setup
 from calculator_po import Calculator as Calc
-
+# external library imports
 import unittest
 from selenium.webdriver.common.action_chains import ActionChains as Action
 
@@ -15,7 +15,6 @@ class CalculatorTest(unittest.TestCase):
     calcsession = None
     calc = None
     action = None
-
 
     def setUp(self):
         self.calcsession = self.setup.setUp()
@@ -50,11 +49,12 @@ class CalculatorTest(unittest.TestCase):
         self.assertEqual(self.calc.get_display_result(), "16")
 
     def test_move_calc(self):
-        self.action.click_and_hold(self.calcsession.find_element_by_accessibility_id("AppName"))\
-            .move_by_offset(50, 50).perform()
-        self.action.click_and_hold(self.calcsession.find_element_by_accessibility_id("AppName"))\
-            .move_by_offset(-50, -50).perform()
-        self.action.context_click(self.calcsession.find_element_by_accessibility_id("AppName"))
+        """Moving test"""
+
+        print("Moving Test")
+        self.action.click_and_hold(self.calc.app_hold()).move_by_offset(50, 50).perform()
+        self.action.click_and_hold(self.calc.app_hold()).move_by_offset(-50, -50).perform()
+        self.action.context_click(self.calc.app_hold())
 
 
     # # BY CLASS_NAME

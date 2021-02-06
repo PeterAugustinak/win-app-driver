@@ -14,3 +14,6 @@ class Calculator:
     def get_display_result(self):
         text = self.driver.find_element_by_accessibility_id("CalculatorResults").text
         return text.strip("Display is ").rstrip(" ").lstrip(" ")
+
+    def app_hold(self):
+        return self.driver.find_element_by_accessibility_id("AppName")
