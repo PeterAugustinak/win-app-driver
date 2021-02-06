@@ -6,7 +6,8 @@ from calculator_po import Calculator as Calc
 # external library imports
 import unittest
 from selenium.webdriver.common.action_chains import ActionChains as Action
-
+# standard library imports
+import time
 
 class CalculatorTest(unittest.TestCase):
     """Test Scenario for Calculator"""
@@ -41,6 +42,8 @@ class CalculatorTest(unittest.TestCase):
 
         print("Subtraction Test")
         self.calc.button("One").click()
+        # first click not performed, no idea why
+        self.calc.button("One").click()
         self.calc.button("Nine").click()
         self.calc.button("Minus").click()
         self.calc.button("Three").click()
@@ -54,7 +57,9 @@ class CalculatorTest(unittest.TestCase):
         print("Moving Test")
         self.action.click_and_hold(self.calc.app_hold()).move_by_offset(50, 50).perform()
         self.action.click_and_hold(self.calc.app_hold()).move_by_offset(-50, -50).perform()
-        self.action.context_click(self.calc.app_hold())
+        # not working ...
+        self.action.context_click(self.calc.app_hold()).perform()
+        time.sleep(2)
 
 
     # # BY CLASS_NAME
