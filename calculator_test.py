@@ -1,11 +1,13 @@
 # coding=utf-8
+
+# local library imports
+from calculator_po import Calculator as Calc
+
 import unittest
 from appium import webdriver
 
 
 class CalculatorTest(unittest.TestCase):
-    calcsession = None
-    calcresult = None
 
     def setUp(self):
         """Setup method"""
@@ -15,6 +17,7 @@ class CalculatorTest(unittest.TestCase):
             self.calcsession = webdriver.Remote(
                 command_executor="http://127.0.0.1:4723",
                 desired_capabilities=desired_caps)
+            self.calc = Calc(self.calcsession)
         except ConnectionRefusedError as e:
             print(f"EXCEPTION:  {e}")
 
@@ -26,30 +29,16 @@ class CalculatorTest(unittest.TestCase):
     def test_add(self):
         """Add test"""
         print("Adding Test")
-        self.calcsession.find_element_by_name("One").click()
-        self.calcsession.find_element_by_name("Two").click()
-        self.calcsession.find_element_by_name("Plus").click()
-        self.calcsession.find_element_by_name("Nine").click()
-        self.calcsession.find_element_by_name("Equals").click()
+        self.calc.button("One").click()
+        self.calc.button("Nine").click()
+        self.calc.button("Plus").click()
+        self.calc.button("Three").click()
+        self.calc.button("Equals").click()
 
-        self.assertEqual(self.getDisplayResults(), "21")
+        self.assertEqual(self.calc.get_display_result(), "22")
 
-    def test_subtraction(self):
-        """Subtraction test"""
-        print("Subtraction Test")
-
-    def test_division(self):
-        """Division test"""
-        print("Division Test")
-
-    def test_multiplication(self):
-        """Multiplication test"""
         print("Multiplication Test")
 
-    def getDisplayResults(self):
-        text = self.calcsession.find_element_by_accessibility_id("CalculatorResults").text
-        text = text.strip("Display is ").rstrip(" ").lstrip(" ")
-        return text
 
     # BY CLASS_NAME
     def choose_calculator(self, locator):
