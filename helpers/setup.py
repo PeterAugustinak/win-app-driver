@@ -1,19 +1,17 @@
 # coding=utf-8
 
 # standard library imports
-import unittest
 from appium import webdriver
 
 
 class Setup:
     """set up class for driver"""
-
     calcsession = None
 
-    def setUp(self):
+    def setUp(self, app):
         """Setup method"""
         print("Setup is running ...")
-        desired_caps = {"app": "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"}
+        desired_caps = {"app": app}
         try:
             self.calcsession = webdriver.Remote(
                 command_executor="http://127.0.0.1:4723",

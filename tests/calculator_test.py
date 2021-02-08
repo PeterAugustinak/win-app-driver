@@ -1,8 +1,8 @@
 # coding=utf-8
 
 # local library imports
-from setup import Setup
-from calculator_po import Calculator as Calc
+from helpers.setup import Setup
+from page_objects.calculator_po import Calculator as Calc
 # external library imports
 import unittest
 from selenium.webdriver.common.action_chains import ActionChains as Action
@@ -16,9 +16,11 @@ class CalculatorTest(unittest.TestCase):
     calcsession = None
     calc = None
     action = None
+    app = "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"
 
     def setUp(self):
-        self.calcsession = self.setup.setUp()
+
+        self.calcsession = self.setup.setUp(self.app)
         self.calc = Calc(self.calcsession)
         self.action = Action(self.calcsession)
 
